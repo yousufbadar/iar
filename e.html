@@ -1,0 +1,177 @@
+<style> 
+
+img.circle {
+  border-radius: 90%;
+}
+
+div.ex1 {
+  width:400px;
+  margin: auto;
+  border: 3px solid #73AD21;
+  background-color:lightblue;
+}	
+
+</style>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js" type="text/javascript"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="https://cdn.rawgit.com/mckamey/countdownjs/master/countdown.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+//var now 	= moment("2019-09-14 8:39 PM").format("YYYY-MM-DD hh:mm A");
+var now 	= moment().format("YYYY-MM-DD hh:mm A");
+var then = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
+var today = moment("2019-10-01").format("YYYY-MM-DD");
+var after1day = moment("2019-10-01").add(1, 'days').format("YYYY-MM-DD");
+var after2days = moment("2019-10-01").add(2, 'days').format("YYYY-MM-DD");
+var yesterday = moment("2019-10-01").add(-1, 'days').format("YYYY-MM-DD");
+
+var todaysTimes = {};
+var dayOneTimes ={};
+var dayTwoTimes = {};
+var ydayTimes = {};
+
+var todayAdhan = {};
+var dayOneAdhan ={};
+var dayTwoAdhan = {};
+var ydayAdhan = {};
+
+$.ajax({
+    url: 'https://raleighmasjid.org/API/prayer/?date='+today
+}).then(function(data0) {
+    todaysTimes = data0.iqamah;
+    todayAdhan = data0.adhan;
+        $.ajax({
+        url: 'https://raleighmasjid.org/API/prayer/?date='+after1day
+        }).then(function(data1) {
+            dayOneTimes = data1.iqamah;
+            dayOneAdhan = data1.adhan;
+            $.ajax({
+                url: 'https://raleighmasjid.org/API/prayer/?date='+after2days
+                }).then(function(data2) {
+                    dayTwoTimes = data2.iqamah;
+                    dayTwoAdhan = data2.adhan;
+                    $.ajax({
+                        url: 'https://raleighmasjid.org/API/prayer/?date='+yesterday
+                        }).then(function(data3) {
+                            ydayTimes = data3.iqamah;
+                            ydayAdhan = data3.adhan;
+                            salahTimes();
+							changesInDays();
+                        });
+                });
+        });
+});
+
+
+    var times  = "Time changes ";
+    var salahs = "";
+    var inDays = "";
+function changesInDays(){
+    console.log(todaysTimes, dayOneTimes, dayTwoTimes, ydayTimes)
+    // ********** FAJR **********
+    if(todaysTimes.Fajr != dayOneTimes.Fajr){
+        salahs += " Fajr["+dayOneTimes.Fajr+"]";
+        inDays = " tomorrow ";
+    } else if(todaysTimes.Fajr != dayTwoTimes.Fajr){
+        salahs += " Fajr["+dayTwoTimes.Fajr+"]";
+        inDays = "in 2 days ";
+    } else if(todaysTimes.Fajr != ydayTimes.Fajr){
+        salahs += " Fajr["+todaysTimes.Fajr+"]";
+        inDays = "today ";
+    }
+    // ********** ASR **********
+    if(todaysTimes.Asr != dayOneTimes.Asr){
+        salahs += " Asr ["+dayOneTimes.Asr+"]";
+        inDays = " tomorrow ";
+    } else if(todaysTimes.Asr != dayTwoTimes.Asr){
+        salahs += " Asr ["+dayTwoTimes.Asr+"]";
+        inDays = "in 2 days ";
+    } else if(todaysTimes.Asr != ydayTimes.Asr){
+        salahs += " Asr ["+todaysTimes.Asr+"]";
+        inDays = "today ";
+    }
+    // ********** ISHA **********
+    if(todaysTimes.Isha != dayOneTimes.Isha){
+        salahs += " Isha ["+dayOneTimes.Isha+"]";
+        inDays = " tomorrow ";
+    } else     if(todaysTimes.Isha != dayTwoTimes.Isha){
+        salahs += " Isha ["+dayTwoTimes.Isha+"]";
+        inDays = "in 2 days ";
+    } else    if(todaysTimes.Isha != ydayTimes.Isha){
+        salahs += " Isha ["+todaysTimes.Isha+"]";
+        inDays = "today ";
+    }
+	if(salahs.length>1) {
+		$(".timeChange").text(times + inDays + " for " );
+		$(".timeChange").append("<br><br>");
+		$(".timeChange").append("<font color=red>"+salahs+"</font>");
+	}
+}   
+
+function salahTimes(){
+    var fajr = moment().format("YYYY-MM-DD ") + todaysTimes.Fajr;
+    var fajrA = moment().format("YYYY-MM-DD ") + todayAdhan.Fajr;
+
+    var dhohr = moment().format("YYYY-MM-DD ") + todaysTimes.Dhuhr;
+    var dhohrA = moment().format("YYYY-MM-DD ") + todayAdhan.Dhuhr;
+
+    var asr = moment().format("YYYY-MM-DD ") + todaysTimes.Asr;
+    var asrA = moment().format("YYYY-MM-DD ") + todayAdhan.Asr;
+
+    var maghrib = moment().format("YYYY-MM-DD ") + todaysTimes.Maghrib;
+    var maghribA = moment().format("YYYY-MM-DD ") + todayAdhan.Maghrib;
+
+    var isha = moment().format("YYYY-MM-DD ") + todaysTimes.Isha;
+    var ishaA = moment().format("YYYY-MM-DD ") + todayAdhan.Isha;
+
+    console.log(fajr, fajrA, dhohr, dhohrA, asr, asrA, maghrib, maghribA, isha, ishaA);
+
+    var nextIqamah = moment().format("YYYY-MM-DD hh:mm A")
+    if(moment(now).isBefore(fajr)){
+        nextIqamah = fajr;
+    } else if(moment(now).isBefore(dhohr)){
+        nextIqamah = dhohr;
+    } else if(moment(now).isBefore(asr)){
+        nextIqamah = asr;        
+    } else if(moment(now).isBefore(maghrib)){
+        nextIqamah = maghrib;
+    } else if(moment(now).isBefore(isha)){
+        nextIqamah = isha;
+    }  
+    console.log("its " + nextIqamah);
+    const diff = moment(nextIqamah).diff(now);
+					//express as a duration
+					const diffDuration = moment.duration(diff);					
+                    //console.log(diffDuration.hours()*60 + diffDuration.minutes());
+          			then = moment().add(60*(diffDuration.hours()*60 + diffDuration.minutes()), 'seconds');
+					$('.time2Salah').append("Minutes to Salaah: ", diffDuration.minutes());
+    }
+        (function timerLoop() {        
+        $(".time2Salah").text(countdown(then).toString());
+        requestAnimationFrame(timerLoop);})();
+</script>
+<center>
+<p></p>
+<h1 class="timeChange"></h1>
+<h1>Time to Salah</h1>
+<h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
+<p></p>
+
+<a href="https://raleighmasjid.org/"><img src="assets\images\3.jpg" alt="Avatar" style="width:800px; height:800px" class="circle"></a>
+<br><br><br><br><p></p>
+
+<table>
+ <tr>
+    <td>
+		<div class="ex1" align="center">
+			<h1>Donate</h1>
+				<img src="assets\images\iarDonate.png" width=200px  height=200px>
+			<br>
+		</div>
+	</td>
+</tr>
+</table>
+<p><font style="font-size:60px"><b>This is a touch screen</b></font></p>
+<a href="https://raleighmasjid.org/"><img src="assets\images\try.png" style="width:150px; height:150px"></a>
+<h2><font color="blue">Click on links on the top to explore</font></h2>
+</center>
