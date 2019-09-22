@@ -4,6 +4,15 @@ img.circle {
   border-radius: 90%;
 }
 
+th {
+    background-color: bisque;
+    padding: 10 px;    
+}
+
+table {
+    border-color: #73AD21;    
+}
+
 div.ex1 {
   width:400px;
   margin: auto;
@@ -18,21 +27,21 @@ div.ex1 {
 <script src="https://cdn.rawgit.com/mckamey/countdownjs/master/countdown.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 //var now 	= moment("2019-09-14 8:39 PM").format("YYYY-MM-DD hh:mm A");
-var now 	= moment().format("YYYY-MM-DD hh:mm A");
-var then = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
-var today = moment("2019-10-01").format("YYYY-MM-DD");
-var after1day = moment("2019-10-01").add(1, 'days').format("YYYY-MM-DD");
-var after2days = moment("2019-10-01").add(2, 'days').format("YYYY-MM-DD");
-var yesterday = moment("2019-10-01").add(-1, 'days').format("YYYY-MM-DD");
+var now     = moment().format("YYYY-MM-DD hh:mm A");
+var then    = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
+var today   = moment().format("YYYY-MM-DD");
+var tomoro  = moment(today).add(1, 'days').format("YYYY-MM-DD");
+var dayAftertomoro = moment(today).add(2, 'days').format("YYYY-MM-DD");
+var yesterday = moment(today).add(-1, 'days').format("YYYY-MM-DD");
 
 var todaysTimes = {};
-var dayOneTimes ={};
-var dayTwoTimes = {};
+var tomoroTimes ={}; 
+var dayAfterTomoro = {};
 var ydayTimes = {};
 
 var todayAdhan = {};
-var dayOneAdhan ={};
-var dayTwoAdhan = {};
+var tomoroAdhan ={};
+var dayAfterTomoroAdhan = {};
 var ydayAdhan = {};
 
 $.ajax({
@@ -41,15 +50,15 @@ $.ajax({
     todaysTimes = data0.iqamah;
     todayAdhan = data0.adhan;
         $.ajax({
-        url: 'https://raleighmasjid.org/API/prayer/?date='+after1day
+        url: 'https://raleighmasjid.org/API/prayer/?date='+tomoro
         }).then(function(data1) {
-            dayOneTimes = data1.iqamah;
-            dayOneAdhan = data1.adhan;
+            tomoroTimes = data1.iqamah;
+            tomoroAdhan = data1.adhan;
             $.ajax({
-                url: 'https://raleighmasjid.org/API/prayer/?date='+after2days
+                url: 'https://raleighmasjid.org/API/prayer/?date='+dayAftertomoro
                 }).then(function(data2) {
-                    dayTwoTimes = data2.iqamah;
-                    dayTwoAdhan = data2.adhan;
+                    dayAfterTomoro = data2.iqamah;
+                    dayAfterTomoroAdhan = data2.adhan;
                     $.ajax({
                         url: 'https://raleighmasjid.org/API/prayer/?date='+yesterday
                         }).then(function(data3) {
@@ -67,35 +76,35 @@ $.ajax({
     var salahs = "";
     var inDays = "";
 function changesInDays(){
-    console.log(todaysTimes, dayOneTimes, dayTwoTimes, ydayTimes)
+    console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
     // ********** FAJR **********
-    if(todaysTimes.Fajr != dayOneTimes.Fajr){
-        salahs += " Fajr["+dayOneTimes.Fajr+"]";
-        inDays = " tomorrow ";
-    } else if(todaysTimes.Fajr != dayTwoTimes.Fajr){
-        salahs += " Fajr["+dayTwoTimes.Fajr+"]";
+    if(todaysTimes.Fajr != tomoroTimes.Fajr){
+        salahs += " Fajr["+tomoroTimes.Fajr+"]";
+        inDays = " tomoro ";
+    } else if(todaysTimes.Fajr != dayAfterTomoro.Fajr){
+        salahs += " Fajr["+dayAfterTomoro.Fajr+"]";
         inDays = "in 2 days ";
     } else if(todaysTimes.Fajr != ydayTimes.Fajr){
         salahs += " Fajr["+todaysTimes.Fajr+"]";
         inDays = "today ";
     }
     // ********** ASR **********
-    if(todaysTimes.Asr != dayOneTimes.Asr){
-        salahs += " Asr ["+dayOneTimes.Asr+"]";
-        inDays = " tomorrow ";
-    } else if(todaysTimes.Asr != dayTwoTimes.Asr){
-        salahs += " Asr ["+dayTwoTimes.Asr+"]";
+    if(todaysTimes.Asr != tomoroTimes.Asr){
+        salahs += " Asr ["+tomoroTimes.Asr+"]";
+        inDays = " tomoro ";
+    } else if(todaysTimes.Asr != dayAfterTomoro.Asr){
+        salahs += " Asr ["+dayAfterTomoro.Asr+"]";
         inDays = "in 2 days ";
     } else if(todaysTimes.Asr != ydayTimes.Asr){
         salahs += " Asr ["+todaysTimes.Asr+"]";
         inDays = "today ";
     }
     // ********** ISHA **********
-    if(todaysTimes.Isha != dayOneTimes.Isha){
-        salahs += " Isha ["+dayOneTimes.Isha+"]";
-        inDays = " tomorrow ";
-    } else     if(todaysTimes.Isha != dayTwoTimes.Isha){
-        salahs += " Isha ["+dayTwoTimes.Isha+"]";
+    if(todaysTimes.Isha != tomoroTimes.Isha){
+        salahs += " Isha ["+tomoroTimes.Isha+"]";
+        inDays = " tomoro ";
+    } else     if(todaysTimes.Isha != dayAfterTomoro.Isha){
+        salahs += " Isha ["+dayAfterTomoro.Isha+"]";
         inDays = "in 2 days ";
     } else    if(todaysTimes.Isha != ydayTimes.Isha){
         salahs += " Isha ["+todaysTimes.Isha+"]";
@@ -109,35 +118,55 @@ function changesInDays(){
 }   
 
 function salahTimes(){
-    var fajr = moment().format("YYYY-MM-DD ") + todaysTimes.Fajr;
-    var fajrA = moment().format("YYYY-MM-DD ") + todayAdhan.Fajr;
+    var fajr = today + " " + todaysTimes.Fajr;
+    var fajrA = today + " " + todayAdhan.Fajr;
+    
+    var fajrT = tomoro + " " + tomoroTimes.Fajr;
+    var fajrTA = tomoro + " " + tomoroAdhan.Fajr;
 
-    var dhohr = moment().format("YYYY-MM-DD ") + todaysTimes.Dhuhr;
-    var dhohrA = moment().format("YYYY-MM-DD ") + todayAdhan.Dhuhr;
+    var dhohr = today + " " + todaysTimes.Dhuhr;
+    var dhohrA = today + " " + todayAdhan.Dhuhr;
 
-    var asr = moment().format("YYYY-MM-DD ") + todaysTimes.Asr;
-    var asrA = moment().format("YYYY-MM-DD ") + todayAdhan.Asr;
+    var asr = today + " " + todaysTimes.Asr;
+    var asrA = today + " " + todayAdhan.Asr;
 
-    var maghrib = moment().format("YYYY-MM-DD ") + todaysTimes.Maghrib;
-    var maghribA = moment().format("YYYY-MM-DD ") + todayAdhan.Maghrib;
+    var maghrib = today + " " + todaysTimes.Maghrib;
+    var maghribA = today + " " + todayAdhan.Maghrib;
 
-    var isha = moment().format("YYYY-MM-DD ") + todaysTimes.Isha;
-    var ishaA = moment().format("YYYY-MM-DD ") + todayAdhan.Isha;
+    var isha = today + " " + todaysTimes.Isha;
+    var ishaA = today + " " + todayAdhan.Isha;
 
-    console.log(fajr, fajrA, dhohr, dhohrA, asr, asrA, maghrib, maghribA, isha, ishaA);
+    var start = "";
+    //console.log(fajr, fajrA, dhohr, dhohrA, asr, asrA, maghrib, maghribA, isha, ishaA);
 
     var nextIqamah = moment().format("YYYY-MM-DD hh:mm A")
     if(moment(now).isBefore(fajr)){
         nextIqamah = fajr;
+        start = todaysTimes.Fajr ; 
+        end = todayAdhan.Fajr;
     } else if(moment(now).isBefore(dhohr)){
         nextIqamah = dhohr;
+        start = todayAdhan.Dhuhr ; 
+        end = todaysTimes.Dhuhr;
     } else if(moment(now).isBefore(asr)){
-        nextIqamah = asr;        
+        nextIqamah = asr;   
+        start = todayAdhan.Asr;
+        end = todaysTimes.Asr;     
     } else if(moment(now).isBefore(maghrib)){
         nextIqamah = maghrib;
+        start = todayAdhan.Maghrib ;
+        end = todaysTimes.Maghrib;
     } else if(moment(now).isBefore(isha)){
         nextIqamah = isha;
+        start = todayAdhan.Isha ;
+        end = todaysTimes.Isha;
+    } else if(moment(now).isBefore(fajrT)){
+        nextIqamah = fajrT;
+        start = tomoroAdhan.Fajr ;
+        end =  tomoroTimes.Fajr;        
     }  
+    $(".start").text(start);
+    $(".end").text(end);
     console.log("its " + nextIqamah);
     const diff = moment(nextIqamah).diff(now);
 					//express as a duration
@@ -153,9 +182,11 @@ function salahTimes(){
 <center>
 <p></p>
 <h1 class="timeChange"></h1>
-<h1>Time to Salah</h1>
+<h1>Time to Next Iqamah</h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
+<table border=1><tr><th>Adhan</th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
 <p></p>
+
 
 <a href="https://raleighmasjid.org/"><img src="assets\images\3.jpg" alt="Avatar" style="width:800px; height:800px" class="circle"></a>
 <br><br><br><br><p></p>
