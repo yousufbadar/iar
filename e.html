@@ -1,24 +1,29 @@
 <style> 
 
-img.circle {
-  border-radius: 90%;
-}
+    img.circle {
+    border-radius: 90%;
+    }
 
-th {
-    background-color: bisque;
-    padding: 10 px;    
-}
+    th {
+        background-color: bisque;
+        padding: 100 px;
+        font-size: 20; 
+        height: 25px;
+       
+    }
 
-table {
-    border-color: #73AD21;    
-}
+    table {
+        border: 1px solid black;
+        border-color: #73AD21;  
+        border-collapse: collapse;  
+    }
 
-div.ex1 {
-  width:400px;
-  margin: auto;
-  border: 3px solid #73AD21;
-  background-color:lightblue;
-}	
+    div.ex1 {
+    width:400px;
+    margin: auto;
+    border: 3px solid #73AD21;
+    background-color:lightblue;
+    }	
 
 </style>
 <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
@@ -27,12 +32,14 @@ div.ex1 {
 <script src="https://cdn.rawgit.com/mckamey/countdownjs/master/countdown.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 //var now 	= moment("2019-09-14 8:39 PM").format("YYYY-MM-DD hh:mm A");
-var now     = moment().format("YYYY-MM-DD hh:mm A");
+
 var then    = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
 var today   = moment().format("YYYY-MM-DD");
 var tomoro  = moment(today).add(1, 'days').format("YYYY-MM-DD");
 var dayAftertomoro = moment(today).add(2, 'days').format("YYYY-MM-DD");
 var yesterday = moment(today).add(-1, 'days').format("YYYY-MM-DD");
+//var now     = moment("2019-09-25 07:14 AM").format("YYYY-MM-DD hh:mm A");
+var now     = moment().format("YYYY-MM-DD hh:mm A");
 
 var todaysTimes = {};
 var tomoroTimes ={}; 
@@ -76,7 +83,8 @@ $.ajax({
     var salahs = "";
     var inDays = "";
 function changesInDays(){
-    console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
+    console.log("today is " +today);
+   // console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
     // ********** FAJR **********
     if(todaysTimes.Fajr != tomoroTimes.Fajr){
         salahs += " Fajr["+tomoroTimes.Fajr+"]";
@@ -137,9 +145,14 @@ function salahTimes(){
     var ishaA = today + " " + todayAdhan.Isha;
 
     var start = "";
-    //console.log(fajr, fajrA, dhohr, dhohrA, asr, asrA, maghrib, maghribA, isha, ishaA);
+    console.log(fajrA, fajr)
+    console.log(dhohrA, dhohr);        
+    console.log(asrA, asr); 
+    console.log(maghribA, maghrib); 
+    console.log(ishaA, isha);   
+    
 
-    var nextIqamah = moment().format("YYYY-MM-DD hh:mm A")
+
     if(moment(now).isBefore(fajr)){
         nextIqamah = fajr;
         start = todaysTimes.Fajr ; 
@@ -167,7 +180,8 @@ function salahTimes(){
     }  
     $(".start").text(start);
     $(".end").text(end);
-    console.log("its " + nextIqamah);
+    console.log("now is "+moment(now).format("YYYY-MM-DD hh:mm A"));
+    console.log("next iqamah " + nextIqamah);
     const diff = moment(nextIqamah).diff(now);
 					//express as a duration
 					const diffDuration = moment.duration(diff);					
@@ -184,7 +198,7 @@ function salahTimes(){
 <h1 class="timeChange"></h1>
 <h1>Time to Next Iqamah</h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
-<table border=1><tr><th>Adhan</th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
+<table border=1><tr><th> Adhan </th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
 <p></p>
 
 
