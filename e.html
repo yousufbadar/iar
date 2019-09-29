@@ -26,6 +26,13 @@
         border-collapse: collapse;  
     }
 
+    div.timeChangeBox {
+    width:700px;
+    margin: auto;
+    border: 3px solid #73AD21;
+    background-color:yellow;
+    }
+
     div.ex1 {
     width:400px;
     margin: auto;
@@ -95,41 +102,41 @@ function changesInDays(){
    // console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
     // ********** FAJR **********
     if(todaysTimes.Fajr != tomoroTimes.Fajr){
-        salahs += " Fajr["+tomoroTimes.Fajr+"]";
+        salahs += " Fajr ["+tomoroTimes.Fajr+"] ";
         inDays = " tomoro ";
     } else if(todaysTimes.Fajr != dayAfterTomoro.Fajr){
-        salahs += " Fajr["+dayAfterTomoro.Fajr+"]";
+        salahs += " Fajr ["+dayAfterTomoro.Fajr+"] ";
         inDays = "in 2 days ";
     } else if(todaysTimes.Fajr != ydayTimes.Fajr){
-        salahs += " Fajr["+todaysTimes.Fajr+"]";
+        salahs += " Fajr ["+todaysTimes.Fajr+"] ";
         inDays = "today ";
     }
     // ********** ASR **********
     if(todaysTimes.Asr != tomoroTimes.Asr){
-        salahs += " Asr ["+tomoroTimes.Asr+"]";
+        salahs += " Asr ["+tomoroTimes.Asr+"] ";
         inDays = " tomoro ";
     } else if(todaysTimes.Asr != dayAfterTomoro.Asr){
-        salahs += " Asr ["+dayAfterTomoro.Asr+"]";
+        salahs += " Asr ["+dayAfterTomoro.Asr+"] ";
         inDays = "in 2 days ";
     } else if(todaysTimes.Asr != ydayTimes.Asr){
-        salahs += " Asr ["+todaysTimes.Asr+"]";
+        salahs += " Asr ["+todaysTimes.Asr+"] ";
         inDays = "today ";
     }
     // ********** ISHA **********
     if(todaysTimes.Isha != tomoroTimes.Isha){
-        salahs += " Isha ["+tomoroTimes.Isha+"]";
+        salahs += " Isha ["+tomoroTimes.Isha+"] ";
         inDays = " tomoro ";
     } else     if(todaysTimes.Isha != dayAfterTomoro.Isha){
-        salahs += " Isha ["+dayAfterTomoro.Isha+"]";
-        inDays = "in 2 days ";
+        salahs += " Isha ["+dayAfterTomoro.Isha+"] ";
+        inDays = "after 2 days ";
     } else    if(todaysTimes.Isha != ydayTimes.Isha){
-        salahs += " Isha ["+todaysTimes.Isha+"]";
+        salahs += " Isha ["+todaysTimes.Isha+"] ";
         inDays = "today ";
     }
 	if(salahs.length>1) {
-		$(".timeChange").text(times + inDays + " for " );
-		$(".timeChange").append("<br><br>");
-		$(".timeChange").append("<font color=red>"+salahs+"</font>");
+		$(".timeChange").append("<div class='timeChangeBox'>"
+        +times + inDays + " for <br><font color=red>"
+        +salahs+"</font></div><p></p>");
 	}
 }   
 
@@ -203,7 +210,9 @@ function salahTimes(){
 </script>
 <center>
 <p></p>
+
 <h1 class="timeChange"></h1>
+
 <h1>Time to Next Iqamah</h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
 <table border=1><tr><th> Adhan </th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
