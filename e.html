@@ -29,7 +29,7 @@
     div.timeChangeBox {
     width:700px;
     margin: auto;
-    border: 3px solid #73AD21;
+    border: 3px solid blue;
     background-color:yellow;
     }
 
@@ -102,35 +102,35 @@ function changesInDays(){
    // console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
     // ********** FAJR **********
     if(todaysTimes.Fajr != tomoroTimes.Fajr){
-        salahs += " Fajr ["+tomoroTimes.Fajr+"] ";
+        salahs += " Fajr [<font color=blue>"+tomoroTimes.Fajr+"</font>] ";
         inDays = " tomoro ";
     } else if(todaysTimes.Fajr != dayAfterTomoro.Fajr){
-        salahs += " Fajr ["+dayAfterTomoro.Fajr+"] ";
+        salahs += " Fajr [<font color=blue>"+dayAfterTomoro.Fajr+"</font>] ";
         inDays = "in 2 days ";
     } else if(todaysTimes.Fajr != ydayTimes.Fajr){
-        salahs += " Fajr ["+todaysTimes.Fajr+"] ";
+        salahs += " Fajr [<font color=blue>"+todaysTimes.Fajr+"</font>] ";
         inDays = "today ";
     }
     // ********** ASR **********
     if(todaysTimes.Asr != tomoroTimes.Asr){
-        salahs += " Asr ["+tomoroTimes.Asr+"] ";
+        salahs += " Asr [<font color=blue>"+tomoroTimes.Asr+"</font>] ";
         inDays = " tomoro ";
     } else if(todaysTimes.Asr != dayAfterTomoro.Asr){
-        salahs += " Asr ["+dayAfterTomoro.Asr+"] ";
+        salahs += " Asr [<font color=blue>"+dayAfterTomoro.Asr+"</font>] ";
         inDays = "in 2 days ";
     } else if(todaysTimes.Asr != ydayTimes.Asr){
-        salahs += " Asr ["+todaysTimes.Asr+"] ";
+        salahs += " Asr [<font color=blue>"+todaysTimes.Asr+"</font>] ";
         inDays = "today ";
     }
     // ********** ISHA **********
     if(todaysTimes.Isha != tomoroTimes.Isha){
-        salahs += " Isha ["+tomoroTimes.Isha+"] ";
+        salahs += " Isha [<font color=blue>"+tomoroTimes.Isha+"</font>] ";
         inDays = " tomoro ";
     } else     if(todaysTimes.Isha != dayAfterTomoro.Isha){
-        salahs += " Isha ["+dayAfterTomoro.Isha+"] ";
+        salahs += " Isha [<font color=blue>"+dayAfterTomoro.Isha+"</font>] ";
         inDays = "after 2 days ";
     } else    if(todaysTimes.Isha != ydayTimes.Isha){
-        salahs += " Isha ["+todaysTimes.Isha+"] ";
+        salahs += " Isha [<font color=blue>"+todaysTimes.Isha+"</font>] ";
         inDays = "today ";
     }
 	if(salahs.length>1) {
