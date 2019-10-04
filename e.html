@@ -166,29 +166,35 @@ function salahTimes(){
     console.log(maghribA, maghrib); 
     console.log(ishaA, isha);   
     
-
+	var salahText = "";
 
     if(moment(now).isBefore(fajr)){
+		salahText = "Fajr";
         nextIqamah = fajr;
         start = todaysTimes.Fajr ; 
         end = todayAdhan.Fajr;
     } else if(moment(now).isBefore(dhohr)){
+		salahText = "Dhuhr";
         nextIqamah = dhohr;
         start = todayAdhan.Dhuhr ; 
         end = todaysTimes.Dhuhr;
     } else if(moment(now).isBefore(asr)){
+		salahText = "Asr";
         nextIqamah = asr;   
         start = todayAdhan.Asr;
         end = todaysTimes.Asr;     
     } else if(moment(now).isBefore(maghrib)){
+		salahText = "Maghrib";
         nextIqamah = maghrib;
         start = todayAdhan.Maghrib ;
         end = todaysTimes.Maghrib;
     } else if(moment(now).isBefore(isha)){
+		salahText = "Isha";
         nextIqamah = isha;
         start = todayAdhan.Isha ;
         end = todaysTimes.Isha;
     } else if(moment(now).isBefore(fajrT)){
+		salahText = "Fajr";
         nextIqamah = fajrT;
         start = tomoroAdhan.Fajr ;
         end =  tomoroTimes.Fajr;        
@@ -197,6 +203,7 @@ function salahTimes(){
     $(".end").text(end);
     console.log("now is "+moment(now).format("YYYY-MM-DD hh:mm A"));
     console.log("next iqamah " + nextIqamah);
+	$(".salahText").append(salahText + " Iqamah");
     const diff = moment(nextIqamah).diff(now);
 					//express as a duration
 					const diffDuration = moment.duration(diff);					
@@ -213,7 +220,7 @@ function salahTimes(){
 
 <h1 class="timeChange"></h1>
 
-<h1>Time to Next Iqamah</h1>
+<h1 class="salahText">Time to </h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
 <table border=1><tr><th> Adhan </th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
 <p></p>
