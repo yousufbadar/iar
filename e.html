@@ -11,20 +11,24 @@
     img.circle {
     border-radius: 90%;
     }
+	
+	table, th, td {
+	  border: 1px solid black;
+	  padding: 2px;
+	}
+	table {
+	  border-spacing: 5px;
+	}
 
-    th {
-        background-color: bisque;
-        padding: 100 px;
-        font-size: 20; 
-        height: 25px;
-       
+    td {
+        background-color: yellow;
+        padding: 10px;
+        font-size: 30;
+		font-weight: 900;
+		font-color: blue;
     }
 
-    table {
-        border: 1px solid black;
-        border-color: #73AD21;  
-        border-collapse: collapse;  
-    }
+
 
     div.timeChangeBox {
     width:700px;
@@ -34,7 +38,8 @@
     }
 
     div.ex1 {
-    width:400px;
+    width:300px;
+	height: 300px;
     margin: auto;
     border: 3px solid #73AD21;
     background-color:lightblue;
@@ -222,19 +227,19 @@ function salahTimes(){
 
 <h1 class="salahText">Time to </h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
-<table border=1><tr><th> Adhan </th><th class="start"></th><th>Iqamah</th><th class="end"></th></tr></table>
+<table><tr><td> Adhan </td><td class="start"></td><td>Iqamah</td><td class="end"></td></h3></tr></table>
 <p></p>
 <center>
 <iframe src="clock.html" class="webPage"></iframe>
 </center>
-<br><br><br><br><p></p>
+<p></p>
 
 <table>
  <tr>
     <td>
 		<div class="ex1" align="center">
-			<h1>Donate</h1>
-				<img src="assets\images\iarDonate.png" width=200px  height=200px>
+			Donate <br><br>
+				<img src="assets\images\iarDonate.png" width="200px"  height="200px">
 			<br>
 		</div>
 	</td>
