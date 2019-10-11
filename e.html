@@ -53,13 +53,12 @@
 <script type="text/javascript">
 //var now 	= moment("2019-09-14 8:39 PM").format("YYYY-MM-DD hh:mm A");
 
-var then    = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
-var today   = moment().format("YYYY-MM-DD");
+var now    = moment().format("YYYY-MM-DD hh:mm A"); // new Date(now + 60 * 1000);
+var today   = moment(now).format("YYYY-MM-DD");
 var tomoro  = moment(today).add(1, 'days').format("YYYY-MM-DD");
 var dayAftertomoro = moment(today).add(2, 'days').format("YYYY-MM-DD");
 var yesterday = moment(today).add(-1, 'days').format("YYYY-MM-DD");
-//var now     = moment("2019-09-25 07:14 AM").format("YYYY-MM-DD hh:mm A");
-var now     = moment().format("YYYY-MM-DD hh:mm A");
+var day = moment(today).isoWeekday();
 
 var todaysTimes = {};
 var tomoroTimes ={}; 
@@ -70,6 +69,20 @@ var todayAdhan = {};
 var tomoroAdhan ={};
 var dayAfterTomoroAdhan = {};
 var ydayAdhan = {};
+var jumua = [
+    {
+        "start" : "11:30 AM",
+        "end" : "12:00 PM"
+    },
+    {
+        "start" : "1:00 PM",
+        "end" : "1:30 PM"
+    },
+    {
+        "start" : "3:00 PM",
+        "end" : "3:30 PM"
+    }
+    ];
 
 $.ajax({
     url: 'https://raleighmasjid.org/API/prayer/?date='+today
@@ -119,7 +132,7 @@ function changesInDays(){
     // ********** ASR **********
     if(todaysTimes.Asr != tomoroTimes.Asr){
         salahs += " Asr [<font color=blue>"+tomoroTimes.Asr+"</font>] ";
-        inDays = " tomoro ";
+        inDays = " Tomorrow ";
     } else if(todaysTimes.Asr != dayAfterTomoro.Asr){
         salahs += " Asr [<font color=blue>"+dayAfterTomoro.Asr+"</font>] ";
         inDays = "in 2 days ";
@@ -130,7 +143,7 @@ function changesInDays(){
     // ********** ISHA **********
     if(todaysTimes.Isha != tomoroTimes.Isha){
         salahs += " Isha [<font color=blue>"+tomoroTimes.Isha+"</font>] ";
-        inDays = " tomoro ";
+        inDays = " Tomorrow ";
     } else     if(todaysTimes.Isha != dayAfterTomoro.Isha){
         salahs += " Isha [<font color=blue>"+dayAfterTomoro.Isha+"</font>] ";
         inDays = "after 2 days ";
@@ -163,6 +176,9 @@ function salahTimes(){
 
     var isha = today + " " + todaysTimes.Isha;
     var ishaA = today + " " + todayAdhan.Isha;
+    j1 = today + " " + jumua[0].end;
+    j2 = today + " " + jumua[1].end;
+    j3 = today + " " + jumua[2].end;
 
     var start = "";
     console.log(fajrA, fajr)
@@ -170,15 +186,42 @@ function salahTimes(){
     console.log(asrA, asr); 
     console.log(maghribA, maghrib); 
     console.log(ishaA, isha);   
+    console.log(jumua);
+    console.log(now);
     
 	var salahText = "";
 
     if(moment(now).isBefore(fajr)){
 		salahText = "Fajr";
         nextIqamah = fajr;
-        start = todaysTimes.Fajr ; 
-        end = todayAdhan.Fajr;
-    } else if(moment(now).isBefore(dhohr)){
+        start = todayAdhan.Fajr;
+        end = todaysTimes.Fajr ; 
+    } else if(moment(now).isBefore(j1) && day==5){
+        ///// JUMUA TIMINGS - start
+        console.log("is jumua");
+            console.log("1st shift");
+            salahText = "Jumua First Shift";
+            nextIqamah = j1;
+            start = jumua[0].start ;
+            end =  jumua[0].end;
+            $(".adhan").text("Khutbah");        
+    } else  if(moment(now).isBefore(j2) && day==5){
+        console.log("1st shift");
+        salahText = "Jumua Second Shift";
+        nextIqamah = j2;
+        start = jumua[1].start ;
+        end =  jumua[1].end;        
+        $(".adhan").text("Khutbah");
+    } else  if(moment(now).isBefore(j3) && day==5){
+        console.log("1st shift");
+        salahText = "Jumua Third Shift";
+        nextIqamah = j3;
+        start = jumua[2].start ;
+        end =  jumua[2].end;  
+        $(".adhan").text("Khutbah");     
+        ///// JUMUA TIMINGS - end 
+        }  
+    else if(moment(now).isBefore(dhohr)){
 		salahText = "Dhuhr";
         nextIqamah = dhohr;
         start = todayAdhan.Dhuhr ; 
@@ -204,6 +247,7 @@ function salahTimes(){
         start = tomoroAdhan.Fajr ;
         end =  tomoroTimes.Fajr;        
     }  
+    console.log("start :" + start + " end :" + end );
     $(".start").text(start);
     $(".end").text(end);
     console.log("now is "+moment(now).format("YYYY-MM-DD hh:mm A"));
@@ -213,11 +257,11 @@ function salahTimes(){
 					//express as a duration
 					const diffDuration = moment.duration(diff);					
                     //console.log(diffDuration.hours()*60 + diffDuration.minutes());
-          			then = moment().add(60*(diffDuration.hours()*60 + diffDuration.minutes()), 'seconds');
+          			now = moment().add(60*(diffDuration.hours()*60 + diffDuration.minutes()), 'seconds');
 					$('.time2Salah').append("Minutes to Salaah: ", diffDuration.minutes());
     }
         (function timerLoop() {        
-        $(".time2Salah").text(countdown(then).toString());
+        $(".time2Salah").text(countdown(now).toString());
         requestAnimationFrame(timerLoop);})();
 </script>
 <center>
@@ -227,7 +271,7 @@ function salahTimes(){
 
 <h1 class="salahText">Time to </h1>
 <h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
-<table><tr><td> Adhan </td><td class="start"></td><td>Iqamah</td><td class="end"></td></h3></tr></table>
+<table><tr><td class="adhan"> Adhan </td><td class="start"></td><td>Iqamah</td><td class="end"></td></h3></tr></table>
 <p></p>
 <center>
 <iframe src="clock.html" class="webPage"></iframe>
