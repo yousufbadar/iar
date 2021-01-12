@@ -1,0 +1,392 @@
+<html>
+<style>
+
+    .webPage{
+    width: 850;
+    height: 850;
+    border: none;
+    align-content: center;
+    }
+
+    img.circle {
+    border-radius: 90%;
+    }
+
+table, th, td {
+ border: 1px solid black;
+ padding: 2px;
+}
+table {
+ border-spacing: 5px;
+}
+
+    td {
+        background-color: yellow;
+        padding: 10px;
+        font-size: 30;
+font-weight: 900;
+font-color: blue;
+    }
+
+
+
+    div.timeChangeBox {
+    width:700px;
+    margin: auto;
+    border: 3px solid blue;
+    background-color:yellow;
+    }
+
+    div.ex1 {
+    width:300px;
+height: 300px;
+    margin: auto;
+    border: 3px solid #73AD21;
+    background-color:lightblue;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js" type="text/javascript"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="https://cdn.rawgit.com/mckamey/countdownjs/master/countdown.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+//var now = moment("2021-01-15 01:19 PM").format("YYYY-MM-DD hh:mm A");
+
+var now    = moment().format("YYYY-MM-DD hh:mm A"); 
+var today   = moment(now).format("YYYY-MM-DD");
+var tomoro  = moment(today).add(1, 'days').format("YYYY-MM-DD");
+var dayAftertomoro = moment(today).add(2, 'days').format("YYYY-MM-DD");
+var yesterday = moment(today).add(-1, 'days').format("YYYY-MM-DD");
+var day = moment(today).isoWeekday();
+var nowSec = 0;
+
+var todaysTimes = {};
+var tomoroTimes ={};
+var dayAfterTomoro = {};
+var ydayTimes = {};
+
+var todayAdhan = {};
+var tomoroAdhan ={};
+var dayAfterTomoroAdhan = {};
+var ydayAdhan = {};
+var jumua = [
+    {
+        "start" : "11:00 AM",
+        "end" : "11:15 AM"
+    },
+    {
+        "start" : "12:00 PM",
+        "end" : "12:15 PM"
+    },
+    {
+        "start" : "1:00 PM",
+        "end" : "1:15 PM"
+    },
+    {
+        "start" : "2:15 PM",
+        "end" : "2:30 PM"
+    }
+    ];
+
+$.ajax({
+    url: 'https://raleighmasjid.org/API/prayer/?date='+today
+}).then(function(data0) {
+    todaysTimes = data0.iqamah;
+    todayAdhan = data0.adhan;
+        $.ajax({
+        url: 'https://raleighmasjid.org/API/prayer/?date='+tomoro
+        }).then(function(data1) {
+            tomoroTimes = data1.iqamah;
+            tomoroAdhan = data1.adhan;
+            $.ajax({
+                url: 'https://raleighmasjid.org/API/prayer/?date='+dayAftertomoro
+                }).then(function(data2) {
+                    dayAfterTomoro = data2.iqamah;
+                    dayAfterTomoroAdhan = data2.adhan;
+                    $.ajax({
+                        url: 'https://raleighmasjid.org/API/prayer/?date='+yesterday
+                        }).then(function(data3) {
+                            ydayTimes = data3.iqamah;
+                            ydayAdhan = data3.adhan;
+                            salahTimes();
+//changesInDays();
+                        });
+                });
+        });
+});
+
+
+    var times  = "Time changes ";
+    var salahs = "";
+    var inDays = "";
+function changesInDays(){
+	salahs = "";
+	inDays = "";
+    console.log("today is " +today);
+   // console.log(todaysTimes, tomoroTimes, dayAfterTomoro, ydayTimes)
+    // ********** FAJR **********
+    if(todaysTimes.Fajr != tomoroTimes.Fajr){
+        salahs += " Fajr [<font color=blue>"+tomoroTimes.Fajr+"</font>] ";
+        inDays = " tomoro ";
+    } else if(todaysTimes.Fajr != dayAfterTomoro.Fajr){
+        salahs += " Fajr [<font color=blue>"+dayAfterTomoro.Fajr+"</font>] ";
+        inDays = "in 2 days ";
+    } else if(todaysTimes.Fajr != ydayTimes.Fajr){
+        salahs += " Fajr [<font color=blue>"+todaysTimes.Fajr+"</font>] ";
+        inDays = "today ";
+    }
+    // ********** ASR **********
+    if(todaysTimes.Asr != tomoroTimes.Asr){
+        salahs += " Asr [<font color=blue>"+tomoroTimes.Asr+"</font>] ";
+        inDays = " Tomorrow ";
+    } else if(todaysTimes.Asr != dayAfterTomoro.Asr){
+        salahs += " Asr [<font color=blue>"+dayAfterTomoro.Asr+"</font>] ";
+        inDays = "in 2 days ";
+    } else if(todaysTimes.Asr != ydayTimes.Asr){
+        salahs += " Asr [<font color=blue>"+todaysTimes.Asr+"</font>] ";
+        inDays = "today ";
+    }
+    // ********** ISHA **********
+    if(todaysTimes.Isha != tomoroTimes.Isha){
+        salahs += " Isha [<font color=blue>"+tomoroTimes.Isha+"</font>] ";
+        inDays = " Tomorrow ";
+    } else     if(todaysTimes.Isha != dayAfterTomoro.Isha){
+        salahs += " Isha [<font color=blue>"+dayAfterTomoro.Isha+"</font>] ";
+        inDays = "after 2 days ";
+    } else    if(todaysTimes.Isha != ydayTimes.Isha){
+        salahs += " Isha [<font color=blue>"+todaysTimes.Isha+"</font>] ";
+        inDays = "today ";
+    }
+if(salahs.length>1) {
+$(".timeChange").text('');
+$(".timeChange").append("<div class='timeChangeBox'>"
+        +times + inDays + " for <br><font color=red>"
+        +salahs+"</font></div><p></p>");
+}
+}  
+
+function salahTimes(){
+	//now = moment().format("YYYY-MM-DD hh:mm A");
+	
+    var fajr = today + " " + todaysTimes.Fajr;
+    var fajrA = today + " " + todayAdhan.Fajr;
+   
+    var fajrT = tomoro + " " + tomoroTimes.Fajr;
+    var fajrTA = tomoro + " " + tomoroAdhan.Fajr;
+
+    var dhohr = today + " " + todaysTimes.Dhuhr;
+    var dhohrA = today + " " + todayAdhan.Dhuhr;
+
+    var asr = today + " " + todaysTimes.Asr;
+    var asrA = today + " " + todayAdhan.Asr;
+
+    var maghrib = today + " " + todaysTimes.Maghrib;
+    var maghribA = today + " " + todayAdhan.Maghrib;
+
+    var isha = today + " " + todaysTimes.Isha;
+    var ishaA = today + " " + todayAdhan.Isha;
+    j1 = today + " " + jumua[0].end;
+    j2 = today + " " + jumua[1].end;
+    j3 = today + " " + jumua[2].end;
+    j4 = today + " " + jumua[3].end;
+    var start = "";
+   // console.log(fajrA, fajr)
+   //  console.log(dhohrA, dhohr);        
+    // console.log(asrA, asr);
+    // console.log(maghribA, maghrib);
+    // console.log(ishaA, isha);  
+    // console.log(jumua);
+    // console.log(now);
+   
+var salahText = "";
+	$(".adhan").text("Adhan");
+    if(moment(now).isBefore(fajr)){
+		salahText = "Fajr";
+        nextIqamah = fajr;
+        start = todayAdhan.Fajr;
+        end = todaysTimes.Fajr ;
+    } else if(moment(now).isBefore(j1) && day==5){
+        ///// JUMUA TIMINGS - start
+       //  console.log("is jumua");
+         //    console.log("1st shift");
+            salahText = "Jumua First Shift";
+            nextIqamah = j1;
+            start = jumua[0].start ;
+            end =  jumua[0].end;
+            $(".adhan").text("Khutbah");        
+    } else  if(moment(now).isBefore(j2) && day==5){
+        // console.log("1st shift");
+        salahText = "Jumua Second Shift";
+        nextIqamah = j2;
+        start = jumua[1].start ;
+        end =  jumua[1].end;        
+        $(".adhan").text("Khutbah");
+    } else  if(moment(now).isBefore(j3) && day==5){
+        // console.log("1st shift");
+        salahText = "Jumua Third Shift";
+        nextIqamah = j3;
+        start = jumua[2].start ;
+        end =  jumua[2].end;  
+        $(".adhan").text("Khutbah");    
+        ///// JUMUA TIMINGS - end
+        } else  if(moment(now).isBefore(j4) && day==5){
+        // console.log("4th shift");
+        salahText = "Jumua Fourth Shift";
+        nextIqamah = j4;
+        start = jumua[3].start ;
+        end =  jumua[3].end;  
+        $(".adhan").text("Khutbah");    
+        ///// JUMUA TIMINGS - end
+        }  
+    else if(moment(now).isBefore(dhohr)){
+salahText = "Dhuhr";
+        nextIqamah = dhohr;
+        start = todayAdhan.Dhuhr ;
+        end = todaysTimes.Dhuhr;
+    } else if(moment(now).isBefore(asr)){
+salahText = "Asr";
+        nextIqamah = asr;  
+        start = todayAdhan.Asr;
+        end = todaysTimes.Asr;    
+    } else if(moment(now).isBefore(maghrib)){
+salahText = "Maghrib";
+        nextIqamah = maghrib;
+        start = todayAdhan.Maghrib ;
+        end = todaysTimes.Maghrib;
+    } else if(moment(now).isBefore(isha)){
+salahText = "Isha";
+        nextIqamah = isha;
+        start = todayAdhan.Isha ;
+        end = todaysTimes.Isha;
+    } else if(moment(now).isBefore(fajrT)){
+salahText = "Fajr";
+        nextIqamah = fajrT;
+        start = tomoroAdhan.Fajr ;
+        end =  tomoroTimes.Fajr;        
+    }  
+    console.log("start :" + start + " end :" + end );
+    $(".start").text(start);
+    $(".end").text(end);
+    console.log("now is "+moment(now).format("YYYY-MM-DD hh:mm A"));
+    console.log("next iqamah " + nextIqamah);
+	$(".salahText").text('Time To ');
+	$(".salahText").append(salahText + " Iqamah");
+		const diff = moment(nextIqamah).diff(now);
+	//express as a duration
+	const diffDuration = moment.duration(diff);
+						//console.log(diffDuration.hours()*60 + diffDuration.minutes());
+			 nowSec = moment().add(60*(diffDuration.hours()*60 + diffDuration.minutes()), 'seconds');
+	$('.time2Salah').append("Minutes to Salaah: ", diffDuration.minutes());
+	console.log(' diffDuration.minutes() '+diffDuration.minutes());
+	console.log(' diffDuration.minutes() '+diffDuration.hours());
+	$(".time2Salah").text(diffDuration.hours() +' Hrs ' + diffDuration.minutes() + ' mins.');
+}
+(function timerLoop() {requestAnimationFrame(timerLoop);})();
+</script>
+<center>
+<p></p>
+
+<h1 class="timeChange"></h1>
+
+<h1 class="salahText">Time to </h1>
+<h2 class="time2Salah" style="color:blue;font-size:30px"></h2>
+<table><tr><td class="adhan"> Adhan </td><td class="start"></td><td>Iqamah</td><td class="end"></td></h3></tr></table>
+<p></p>
+<center>
+
+<center>
+<canvas id="canvas" width="800" height="800"
+style="background-color:white">
+</canvas>
+</center>
+<script>
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var radius = canvas.height / 2;
+ctx.translate(radius, radius);
+radius = radius * 0.90
+setInterval(drawClock, 1000);
+setInterval(salahTimes, 60*1000);
+setInterval(changesInDays, 60*60*1000); 
+function drawClock() {
+  drawFace(ctx, radius);
+  drawNumbers(ctx, radius);
+  drawTime(ctx, radius);
+}
+
+function drawFace(ctx, radius) {
+  var grad;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, 2*Math.PI);
+  ctx.fillStyle = 'green';
+  ctx.fill();
+  grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
+  grad.addColorStop(0, 'white');
+  grad.addColorStop(0.5, 'white');
+  grad.addColorStop(1, '#333');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = radius*0.1;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+}
+
+function drawNumbers(ctx, radius) {
+  var ang;
+  var num;
+  ctx.font = radius*0.15 + "px arial";
+  ctx.textBaseline="middle";
+  ctx.textAlign="center";
+  for(num = 1; num < 13; num++){
+    ang = num * Math.PI / 6;
+    ctx.rotate(ang);
+    ctx.translate(0, -radius*0.85);
+    ctx.rotate(-ang);
+    ctx.fillText(num.toString(), 0, 0);
+    ctx.rotate(ang);
+    ctx.translate(0, radius*0.85);
+    ctx.rotate(-ang);
+  }
+}
+
+function drawTime(ctx, radius){
+    //var now = new Date();
+    var hour = moment().hours();
+    var minute = moment().minutes();
+    var second = moment().seconds();
+    //hour
+    hour=hour%12;
+    hour=(hour*Math.PI/6)+
+    (minute*Math.PI/(6*60))+
+    (second*Math.PI/(360*60));
+    drawHand(ctx, hour, radius*0.5, radius*0.07);
+    //minute
+    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    drawHand(ctx, minute, radius*0.8, radius*0.07);
+    // second
+    second=(second*Math.PI/30);
+    drawHand(ctx, second, radius*0.9, radius*0.02);
+}
+
+function drawHand(ctx, pos, length, width) {
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+}
+</script>
+
+</center>
+<p></p>
+
+
+</center>
+
+</html>
